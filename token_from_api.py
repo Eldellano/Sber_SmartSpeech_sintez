@@ -1,9 +1,10 @@
 import requests
 import json
+import username_pass
 
 #TODO: проверка времени жизни токена, запрос нового при истечении
-KC_USER = 'vladislav99355@gmail.com'  # используйте свой логин
-KC_PASSWORD = '369147Vlad_'  # используйте свой пароль
+KC_USER = username_pass.USER
+KC_PASSWORD = username_pass.PASSWORD
 
 def get_refresh_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
