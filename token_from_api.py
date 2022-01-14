@@ -1,6 +1,9 @@
 import requests
 import json
+import time
+import datetime
 import username_pass
+
 
 #TODO: проверка времени жизни токена, запрос нового при истечении
 KC_USER = username_pass.USER
@@ -45,13 +48,45 @@ def get_smartspeech_tocken():
                          #       'refresh_token': f'{smartsppech_token}'})
     # print(resp_smartsppech.status_code)
     # print(resp_smartsppech.headers)
-    print(resp_smartsppech.content)
+    # print(resp_smartsppech.content)
     js_get = json.loads(resp_smartsppech.content)
-    print(js_get['token'])
+    # print(js_get)
+    tok = js_get['token']
+    exp = js_get['expired_at']
+    # print(type(dict))
+    with open('smartsppech.token', 'wb') as file: # пишем контент в файл
+        file.write(resp_smartsppech.content)
+
 
 
 # print(resp.status_code)
 # print(resp.headers)
 # print(resp.content)
 
-get_smartspeech_tocken()
+#get_smartspeech_tocken()  # вызов функции
+
+# with open('smartsppech.token', 'r') as file:
+#     print(file.read())
+def tocken_get():
+    with open('smartsppech.token', 'rb') as file:
+        file_cont = file.read()
+    js_get = json.loads(file_cont)
+    token = js_get['token']
+    exp = js_get['expired_at']
+
+    # вычисляем время жизни токена
+    date_now = time.localtime(time.time())
+    date_token = time.localtime(exp)  # token lifetime
+    delta_now = datetime.timedelta(days=date_now.tm_yday, minutes=date_now.tm_min, hours=date_now.tm_hour)
+    delta_token = datetime.timedelta(days=date_token.tm_yday, minutes=date_token.tm_min, hours=date_token.tm_hour)
+    second_left = int((delta_token - delta_now).total_seconds())  # остаток жизни токена в секундах
+    #print(second_left)
+
+
+    if second_left < 120:  # 120 секунд
+        get_smartspeech_tocken()
+        tocken_get()
+    else:
+        return token
+
+#tocken_get()
