@@ -66,7 +66,7 @@ def tocken_get():
         get_smartspeech_tocken()
         return tocken_get()
 
-    # вычисляем время жизни токена
+    # вычисляем время жизни токена epoch --> human
     date_now = time.localtime(time.time())
     date_token = time.localtime(exp)  # token lifetime
     delta_now = datetime.timedelta(days=date_now.tm_yday, minutes=date_now.tm_min, hours=date_now.tm_hour)
