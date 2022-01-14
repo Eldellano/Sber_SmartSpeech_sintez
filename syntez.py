@@ -18,7 +18,7 @@ SAMPLE_RATE = 24000
 
 
 print(resp.status_code)
-print(resp.headers)
+# print(resp.headers)
 # print(resp.content)
 
 # Воспроизведение
